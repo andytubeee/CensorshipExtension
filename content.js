@@ -43,8 +43,9 @@ const WrapText = (text) => {
 //document.body.innerHTML = document.body.innerHTML.replace('hello', 'hi');
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (!request.word.length) return;
   if (request.task === 'add') {
+    if (!request.word.length) return;
+
     chrome.storage.local.get({ words: [] }, function (result) {
       const words = result.words;
       const exists = words.includes(request.word.toLowerCase());
@@ -56,11 +57,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         function () {
           chrome.storage.local.get('words', function (result) {
             console.log(result.words);
+            alert('Added ' + request.word);
           });
         }
       );
     });
   } else if (request.task === 'remove') {
+    if (!request.word.length) return;
+
     chrome.storage.local.get({ words: [] }, function (result) {
       const words = result.words;
       const exists = words.includes(request.word.toLowerCase());
@@ -72,9 +76,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         function () {
           chrome.storage.local.get('words', function (result) {
             console.log(result.words);
+            alert('Removed ' + request.word);
           });
         }
       );
+    });
+  } else if (request.task === 'get') {
+    chrome.storage.local.get('words', function (result) {
+      console.log(result.words);
     });
   }
 });

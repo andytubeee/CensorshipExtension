@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document
     .querySelector('#btn_remove')
     .addEventListener('click', removeWord, false);
+  document.querySelector('#btn_get').addEventListener('click', getWords, false);
 
   function addWord() {
     const word = document.getElementById('word_input_a').value;
@@ -28,6 +29,14 @@ document.addEventListener('DOMContentLoaded', function () {
           // Response goes here
         }
       );
+    });
+  }
+
+  function getWords() {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { task: 'get' }, function (response) {
+        // Response goes here
+      });
     });
   }
 });
