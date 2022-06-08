@@ -1,0 +1,21 @@
+{
+  "name": "Censorship",
+  "version": "1.0",
+  "description": "Censor words on the internet",
+  "author": "Andrew Yang",
+  "manifest_version": 2,
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "icons": {
+    "48": "icon.png"
+  },
+  "browser_action": {
+    "default_popup": "index.html",
+    "default_title": "Censorship"
+  },
+  "permissions": ["storage"]
+}
