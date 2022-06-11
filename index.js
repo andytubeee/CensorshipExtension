@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', function () {
     .querySelector('#btn_remove')
     .addEventListener('click', removeWord, false);
   document.querySelector('#btn_get').addEventListener('click', getWords, false);
+  document
+    .querySelector('#btn_r_all')
+    .addEventListener('click', removeAllWords, false);
 
   function addWord() {
     const word = document.getElementById('word_input_a').value;
@@ -25,6 +28,17 @@ document.addEventListener('DOMContentLoaded', function () {
       chrome.tabs.sendMessage(
         tabs[0].id,
         { word, task: 'remove' },
+        function (response) {
+          // Response goes here
+        }
+      );
+    });
+  }
+  function removeAllWords() {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        { task: 'removeAll' },
         function (response) {
           // Response goes here
         }
