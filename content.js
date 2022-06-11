@@ -5,17 +5,15 @@ document.body.innerHTML = document.body.innerHTML.replace('hello', 'hi'); // rep
 
 */
 const censorWords = (el, wordList) => {
-  if (el.children.length > 0) {
+  if (el.children.length === 0 && el.innerText) {
+    for (let word of wordList) {
+      const re = new RegExp(word, 'gi');
+      el.innerHTML = el.innerHTML.replace(re, CensorWord(word));
+    }
+  } else {
     Array.from(el.children).forEach(function (child) {
       censorWords(child, wordList);
     });
-  } else {
-    if (el.innerText) {
-      for (let word of wordList) {
-        const re = new RegExp(word, 'gi');
-        el.innerHTML = el.innerHTML.replace(re, CensorWord(word));
-      }
-    }
   }
 };
 
@@ -62,7 +60,7 @@ const AddWord = (word) => {
     if (exists) return alert('Word already exists');
     words.push(word);
     chrome.storage.local.set({ words });
-    alert('Added word: ' + request.word);
+    alert('Added word: ' + word);
   });
 };
 
@@ -86,7 +84,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     RemoveWord(request.word);
   } else if (request.task === 'get') {
     chrome.storage.local.get('words', function (result) {
-      console.log(result.words);
+      console.log(result?.words || []);
     });
   } else if (request.task === 'removeAll') {
     chrome.storage.local.clear();
